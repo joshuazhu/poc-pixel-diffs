@@ -8,20 +8,19 @@ const PATH_TO_DIFFS = `${__dirname}/fixtures/diffs`;
 const run = async () => {
   const getSubFolders = (path: string) => fs.readdirSync(path);
 
-  const testCases = getSubFolders(PATH_TO_ACTUALS)
-  // const expectsPhotos = getSubFolders(PATH_TO_EXPECTS).map(subFolder => `${PATH_TO_EXPECTS}/${subFolder}/a.png`)
+  const testCases = getSubFolders(PATH_TO_ACTUALS);
 
-  const compareTasks = testCases.map(async (testCase) => {
+  testCases.map(async (testCase) => {
     const actualsPhoto = `${PATH_TO_ACTUALS}/${testCase}/a.png`;
     const expectsPhoto = `${PATH_TO_EXPECTS}/${testCase}/a.png`;
-    const diffResultPath = `${__dirname}/fixtures/diffs/${testCase}`
+    const diffResultPath = `${__dirname}/fixtures/diffs/${testCase}`;
 
     if (!fs.existsSync(expectsPhoto)) {
       fs.copyFileSync(actualsPhoto, expectsPhoto);
     }
 
-    if(!fs.existsSync(diffResultPath)) {
-      fs.mkdirSync(diffResultPath)
+    if (!fs.existsSync(diffResultPath)) {
+      fs.mkdirSync(diffResultPath);
     }
 
     const result = await compare(
@@ -34,11 +33,12 @@ const run = async () => {
       }
     );
 
-    if(!result.match) {
-      console.log(`${testCase}: Pictures not match, saving diff result to ${diffResultPath}`)
+    if (!result.match) {
+      console.log(
+        `${testCase}: Pictures not match, saving diff result to ${diffResultPath}`
+      );
     }
   });
-
 };
 
 run();
